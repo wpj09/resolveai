@@ -58,6 +58,7 @@ export class ProblemController {
         entityId,
         userId,
       } = req.body;
+
       const problem = await prisma.problem.update({
         where: { id: Number(id) },
         data: {
