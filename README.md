@@ -69,7 +69,7 @@ $ npm run dev
 
 As seguintes ferramentas foram usadas na construção do projeto:
 
-#### [](https://github.com/Rodrigo322/resolveai.git)**Backend** ([NodeJS](https://nodejs.org/en/)
+#### [](https://github.com/Rodrigo322/resolveai.git)**Backend** ([NodeJS](https://nodejs.org/en/))
 
 - **[Express](https://expressjs.com/)**
 - **[Prisma](https://www.prisma.io)**
