@@ -5,7 +5,11 @@ import bcrypt from "bcryptjs";
 export class UserController {
   async index(req: Request, res: Response) {
     try {
-      const users = await prisma.user.findMany();
+      const users = await prisma.user.findMany({
+        include: {
+          address: true,
+        },
+      });
 
       return res.status(200).json(users);
     } catch (error) {
@@ -14,7 +18,7 @@ export class UserController {
   }
   async store(req: Request, res: Response) {
     try {
-      const { name, email, endereco, password } = req.body;
+      const { name, email, password } = req.body;
 
       const password_hash = await bcrypt.hash(password, 8);
 
@@ -22,7 +26,6 @@ export class UserController {
         data: {
           name,
           email,
-          endereco,
           password: password_hash,
         },
       });
