@@ -1,5 +1,5 @@
 <h1 align="center">
-    <a href="#" alt="App mobile Dev Favorite"> ResolveAí </a>
+    <a href="#" alt="App ResolveAí"> ResolveAí </a>
 </h1>
 
 <h3 align="center">
