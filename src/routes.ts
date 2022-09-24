@@ -1,22 +1,17 @@
 import { Router } from "express";
 
-import { UserController } from "./app/controllers/UserController";
-import { EntityController } from "./app/controllers/EntityController";
 import { ProblemController } from "./app/controllers/ProblemController";
+import { UserController } from "./app/controllers/UserController";
 
 const userController = new UserController();
-const entityController = new EntityController();
 const problemController = new ProblemController();
 
 const router = Router();
 
-router.post("/create-user", userController.store);
-router.get("/list-user", userController.index);
+router.post("/user", userController.store);
+router.get("/user", userController.index);
 
-router.post("/create-entity", entityController.store);
-router.get("/list-entity", entityController.index);
-
-router.post("/create-problem", problemController.store);
-router.get("/list-problem", problemController.index);
+router.post("/problem", problemController.store);
+router.get("/problems", problemController.index);
 
 export { router };
