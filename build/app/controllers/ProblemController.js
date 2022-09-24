@@ -7,8 +7,11 @@ class ProblemController {
         try {
             const problems = await client_1.prisma.problem.findMany({
                 include: {
-                    entity: true,
-                    user: true,
+                    user: {
+                        select: {
+                            name: true,
+                        },
+                    },
                 },
             });
             return res.status(200).json(problems);

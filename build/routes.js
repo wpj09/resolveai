@@ -10,5 +10,10 @@ const router = (0, express_1.Router)();
 exports.router = router;
 router.post("/user", userController.store);
 router.get("/user", userController.index);
+router.get("/", (req, res) => {
+    return res.json({
+        rota_acessivel: "/problems",
+    });
+});
 router.post("/problem", problemController.store);
 router.get("/problems", problemController.index);
