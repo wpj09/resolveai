@@ -1,12 +1,15 @@
+import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { prisma } from "../../database/client";
-import bcrypt from "bcryptjs";
 
 export class UserController {
   async index(req: Request, res: Response) {
     try {
       const users = await prisma.user.findMany({
-        include: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
           address: true,
         },
       });
@@ -27,6 +30,11 @@ export class UserController {
           name,
           email,
           password: password_hash,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
         },
       });
 
