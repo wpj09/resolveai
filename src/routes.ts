@@ -16,7 +16,8 @@ const router = Router();
 const upload = multer(uploadConfig);
 
 router.post("/user", userController.store);
-router.get("/user", userController.index);
+router.get("/users", authMiddleware, userController.index);
+router.get("/user/:id", authMiddleware, userController.show);
 
 router.get("/", (req: Request, res: Response) => {
   return res.json({
@@ -34,8 +35,9 @@ router.post(
 );
 
 router.put("/problem/:id", problemController.update);
-router.get("/problems/:status", problemController.show);
+router.get("/problems/user/:id/:status", problemController.show);
 router.get("/problem/:id", problemController.getProblem);
 router.get("/problems", problemController.index);
+router.delete("/problem/:id", problemController.delete);
 
 export { router };

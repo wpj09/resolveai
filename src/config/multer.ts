@@ -9,7 +9,7 @@ export default {
     },
   }),
   limits: {
-    fileSize: 8 * 1024 * 1024, // 8MB
+    fileSize: 20 * 1024 * 1024, // 20MB
   },
   fileFilter: (req, file, cb) => {
     const mimeTypes = ["image/jpeg", "image/png"];

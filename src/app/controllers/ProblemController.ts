@@ -16,10 +16,11 @@ export class ProblemController {
   }
   async show(req: Request, res: Response) {
     try {
-      const { status } = req.params;
+      const { status, id } = req.params;
       const problems = await prisma.problem.findMany({
         where: {
           status,
+          userId: Number(id),
         },
         include: {
           user: {
@@ -55,8 +56,8 @@ export class ProblemController {
         data: {
           title,
           description,
-          latitude: Number(latitude),
-          longitude: Number(longitude),
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
           status,
           userId: Number(id),
           Image: {
@@ -104,6 +105,18 @@ export class ProblemController {
         },
       });
       return res.status(200).json(problem);
+    } catch (error) {
+      return res.status(400).json(error);
+    }
+  }
+
+  async delete(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      await prisma.problem.delete({
+        where: { id: Number(id) },
+      });
+      return res.status(204).json({ ok: true });
     } catch (error) {
       return res.status(400).json(error);
     }
