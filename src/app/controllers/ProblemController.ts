@@ -9,6 +9,7 @@ export class ProblemController {
           Image: true,
         },
       });
+
       return res.status(200).json(problems);
     } catch (error) {
       return res.status(400).json(error);
@@ -48,8 +49,14 @@ export class ProblemController {
       const { title, description, latitude, longitude, status } = req.body;
       const requestImages = req.files as Express.Multer.File[];
 
+      const user = await prisma.user.findUnique({ where: { id: Number(id) } });
+
+      if (!user) {
+        return res.status(404).json({ error: "user not found" });
+      }
+
       const images = requestImages.map((image) => {
-        return { path: image.filename };
+        return { path: `http://localhost:3333/images/${image.filename}` };
       });
 
       const problem = await prisma.problem.create({
@@ -76,14 +83,22 @@ export class ProblemController {
       const { id } = req.params;
       const { status, solution } = req.body;
 
-      const problem = await prisma.problem.update({
+      const problem = await prisma.problem.findUnique({
+        where: { id: Number(id) },
+      });
+
+      if (!problem) {
+        return res.status(404).json({ error: "problem not found" });
+      }
+
+      const problemUpdated = await prisma.problem.update({
         where: { id: Number(id) },
         data: {
           status,
           solution,
         },
       });
-      return res.status(200).json(problem);
+      return res.status(200).json(problemUpdated);
     } catch (error) {
       return res.status(400).json(error);
     }
@@ -91,7 +106,16 @@ export class ProblemController {
   async getProblem(req: Request, res: Response) {
     try {
       const { id } = req.params;
+
       const problem = await prisma.problem.findUnique({
+        where: { id: Number(id) },
+      });
+
+      if (!problem) {
+        return res.status(404).json({ error: "problem not found" });
+      }
+
+      const searchProblem = await prisma.problem.findUnique({
         where: {
           id: Number(id),
         },
@@ -104,7 +128,8 @@ export class ProblemController {
           },
         },
       });
-      return res.status(200).json(problem);
+
+      return res.status(200).json(searchProblem);
     } catch (error) {
       return res.status(400).json(error);
     }
@@ -113,6 +138,15 @@ export class ProblemController {
   async delete(req: Request, res: Response) {
     try {
       const { id } = req.params;
+
+      const problem = await prisma.problem.findUnique({
+        where: { id: Number(id) },
+      });
+
+      if (!problem) {
+        return res.status(404).json({ error: "problem not found" });
+      }
+
       await prisma.problem.delete({
         where: { id: Number(id) },
       });

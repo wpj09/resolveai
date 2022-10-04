@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import bcrypt, { compare } from "bcryptjs";
 import { Request, Response } from "express";
 import { prisma } from "../../database/client";
 
@@ -59,6 +59,39 @@ export class UserController {
       return res.status(201).json(user);
     } catch (error) {
       return res.status(400).json(error);
+    }
+  }
+
+  async update(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { name, email, password } = req.body;
+
+      const user = await prisma.user.findUnique({ where: { id: Number(id) } });
+
+      if (!user) {
+        return res.status(404).json({ error: "user not found" });
+      }
+
+      const isPasswordValid = await compare(password, user.password);
+
+      if (!isPasswordValid) {
+        return res.json({ error: "password invalid" });
+      }
+
+      const userUpdated = await prisma.user.update({
+        where: {
+          id: Number(id),
+        },
+        data: {
+          name,
+          email,
+        },
+      });
+
+      return res.status(200).json(userUpdated);
+    } catch (error) {
+      return res.status(400).json("Algo deu errado! ");
     }
   }
 }

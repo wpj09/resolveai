@@ -18,6 +18,7 @@ const upload = multer(uploadConfig);
 router.post("/user", userController.store);
 router.get("/users", authMiddleware, userController.index);
 router.get("/user/:id", authMiddleware, userController.show);
+router.put("/user/:id", authMiddleware, userController.update);
 
 router.get("/", (req: Request, res: Response) => {
   return res.json({
