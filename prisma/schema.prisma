@@ -21,27 +21,21 @@ model Problem {
   id          Int      @id @default(autoincrement())
   title       String
   description String
-  latitude    Int
-  longitude   Int
-  photos      String
-  user        User?    @relation(fields: [userId], references: [id])
-  entity      Entity   @relation(fields: [entityId], references: [id])
+  latitude    Float
+  longitude   Float
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId      Int?
-  entityId    Int
   status      String
+  Image       Image[]
+  solution    String?
   createdAt   DateTime @default(now())
 }
 
-model Entity {
-  id          Int       @id @default(autoincrement())
-  name        String
-  cnpj        String    @unique
-  description String
-  phone       String
-  email       String    @unique
-  problem     Problem[]
-  address     Address[]
-  createdAt   DateTime  @default(now())
+model Image {
+  id        Int     @id @default(autoincrement())
+  path      String
+  problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  problemId Int
 }
 
 model Address {
@@ -50,10 +44,6 @@ model Address {
   number     Int?
   district   String
   complement String?
-
-  entity Entity? @relation(fields: [entityId], references: [id])
-  user   User?   @relation(fields: [userId], references: [id])
-
-  userId   Int?
-  entityId Int?
+  user       User?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId     Int?
 }
