@@ -18,10 +18,11 @@ class ProblemController {
     }
     async show(req, res) {
         try {
-            const { status } = req.params;
+            const { status, id } = req.params;
             const problems = await client_1.prisma.problem.findMany({
                 where: {
                     status,
+                    userId: Number(id),
                 },
                 include: {
                     user: {
@@ -49,15 +50,21 @@ class ProblemController {
             const { id } = req.params;
             const { title, description, latitude, longitude, status } = req.body;
             const requestImages = req.files;
+            const user = await client_1.prisma.user.findUnique({ where: { id: Number(id) } });
+            if (!user) {
+                return res.status(404).json({ error: "user not found" });
+            }
             const images = requestImages.map((image) => {
-                return { path: image.filename };
+                return {
+                    path: `${process.env.UPLOAD_URL_PRODUCTION}/${image.filename}`,
+                };
             });
             const problem = await client_1.prisma.problem.create({
                 data: {
                     title,
                     description,
-                    latitude: Number(latitude),
-                    longitude: Number(longitude),
+                    latitude: parseFloat(latitude),
+                    longitude: parseFloat(longitude),
                     status,
                     userId: Number(id),
                     Image: {
@@ -76,14 +83,20 @@ class ProblemController {
         try {
             const { id } = req.params;
             const { status, solution } = req.body;
-            const problem = await client_1.prisma.problem.update({
+            const problem = await client_1.prisma.problem.findUnique({
+                where: { id: Number(id) },
+            });
+            if (!problem) {
+                return res.status(404).json({ error: "problem not found" });
+            }
+            const problemUpdated = await client_1.prisma.problem.update({
                 where: { id: Number(id) },
                 data: {
                     status,
                     solution,
                 },
             });
-            return res.status(200).json(problem);
+            return res.status(200).json(problemUpdated);
         }
         catch (error) {
             return res.status(400).json(error);
@@ -93,6 +106,12 @@ class ProblemController {
         try {
             const { id } = req.params;
             const problem = await client_1.prisma.problem.findUnique({
+                where: { id: Number(id) },
+            });
+            if (!problem) {
+                return res.status(404).json({ error: "problem not found" });
+            }
+            const searchProblem = await client_1.prisma.problem.findUnique({
                 where: {
                     id: Number(id),
                 },
@@ -105,7 +124,25 @@ class ProblemController {
                     },
                 },
             });
-            return res.status(200).json(problem);
+            return res.status(200).json(searchProblem);
+        }
+        catch (error) {
+            return res.status(400).json(error);
+        }
+    }
+    async delete(req, res) {
+        try {
+            const { id } = req.params;
+            const problem = await client_1.prisma.problem.findUnique({
+                where: { id: Number(id) },
+            });
+            if (!problem) {
+                return res.status(404).json({ error: "problem not found" });
+            }
+            await client_1.prisma.problem.delete({
+                where: { id: Number(id) },
+            });
+            return res.status(204).json({ ok: true });
         }
         catch (error) {
             return res.status(400).json(error);
