@@ -18,7 +18,9 @@ const router = (0, express_1.Router)();
 exports.router = router;
 const upload = (0, multer_1.default)(multer_2.default);
 router.post("/user", userController.store);
-router.get("/user", userController.index);
+router.get("/users", auth_1.authMiddleware, userController.index);
+router.get("/user/:id", auth_1.authMiddleware, userController.show);
+router.put("/user/:id", auth_1.authMiddleware, userController.update);
 router.get("/", (req, res) => {
     return res.json({
         rota_acessivel: "/problems",
@@ -26,7 +28,8 @@ router.get("/", (req, res) => {
 });
 router.post("/authenticate", authController.authenticate);
 router.post("/problem/user/:id", auth_1.authMiddleware, upload.array("images"), problemController.store);
-router.put("/problem/:id", problemController.update);
-router.get("/problems/:status", problemController.show);
-router.get("/problem/:id", problemController.getProblem);
+router.put("/problem/:id", auth_1.authMiddleware, problemController.update);
+router.get("/problems/user/:id/:status", auth_1.authMiddleware, problemController.show);
+router.get("/problem/:id", auth_1.authMiddleware, problemController.getProblem);
 router.get("/problems", problemController.index);
+router.delete("/problem/:id", auth_1.authMiddleware, problemController.delete);

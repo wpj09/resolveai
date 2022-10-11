@@ -34,11 +34,14 @@ router.post(
   upload.array("images"),
   problemController.store
 );
-
-router.put("/problem/:id", problemController.update);
-router.get("/problems/user/:id/:status", problemController.show);
-router.get("/problem/:id", problemController.getProblem);
+router.put("/problem/:id", authMiddleware, problemController.update);
+router.get(
+  "/problems/user/:id/:status",
+  authMiddleware,
+  problemController.show
+);
+router.get("/problem/:id", authMiddleware, problemController.getProblem);
 router.get("/problems", problemController.index);
-router.delete("/problem/:id", problemController.delete);
+router.delete("/problem/:id", authMiddleware, problemController.delete);
 
 export { router };

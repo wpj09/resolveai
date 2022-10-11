@@ -5,4 +5,5 @@ export declare class ProblemController {
     store(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     update(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     getProblem(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
+    delete(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
 }
