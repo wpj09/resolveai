@@ -56,7 +56,7 @@ class ProblemController {
             }
             const images = requestImages.map((image) => {
                 return {
-                    path: `${process.env.UPLOAD_URL_PRODUCTION}/${image.filename}`,
+                    path: `${process.env.UPLOAD_URL}/${image.filename}`,
                 };
             });
             const problem = await client_1.prisma.problem.create({
