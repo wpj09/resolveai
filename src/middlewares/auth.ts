@@ -27,7 +27,7 @@ export function authMiddleware(
   }
 
   try {
-    const decoded = verify(token, secret);
+    const decoded = verify(token, "5ce871d20f253fce72e833df98a8924c08854cd3");
     const { id } = decoded as TokenPayload;
 
     req.userId = id;
