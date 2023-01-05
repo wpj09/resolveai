@@ -29,9 +29,14 @@ export class AuthController {
       return res.status(401).json({ error: "Secret not provided" });
     }
 
-    const token = sign({ id: user.id }, authConfig.secret, {
-      expiresIn: authConfig.expiresIn,
-    });
+    const token = sign(
+      { id: user.id },
+      "5ce871d20f253fce72e833df98a8924c08854cd3",
+      {
+        algorithm: "HS256",
+        expiresIn: "1d",
+      }
+    );
 
     const { id } = user;
 
