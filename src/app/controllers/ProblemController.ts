@@ -83,7 +83,7 @@ export class ProblemController {
   async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { status, solution } = req.body;
+      const { status, solution, entity } = req.body;
 
       const problem = await prisma.problem.findUnique({
         where: { id: Number(id) },
@@ -98,6 +98,7 @@ export class ProblemController {
         data: {
           status,
           solution,
+          entity
         },
       });
       return res.status(200).json(problemUpdated);
