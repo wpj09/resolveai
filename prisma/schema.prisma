@@ -26,6 +26,7 @@ model Problem {
   user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId      Int?
   status      String
+  entity      String?
   Image       Image[]
   solution    String?
   createdAt   DateTime @default(now())
