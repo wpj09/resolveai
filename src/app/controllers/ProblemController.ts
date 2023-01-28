@@ -57,7 +57,7 @@ export class ProblemController {
 
       const images = requestImages.map((image) => {
         return {
-          path: `https://api-resolveai-v1.herokuapp.com/images/${image.filename}`,
+          path: `https://v2resolveai.herokuapp.com/images/${image.filename}`,
         };
       });
 
